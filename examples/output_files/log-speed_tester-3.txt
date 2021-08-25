@@ -1,0 +1,471 @@
+EAL: Detected 20 lcore(s)
+EAL: Detected 2 NUMA nodes
+EAL: Multi-process socket /var/run/dpdk/rte/mp_socket_195520_39067d11b9d0ea
+EAL: Selected IOVA mode 'PA'
+[Press Ctrl-C to quit ...]
+EAL: Probing VFIO support...
+EAL: VFIO support initialized
+EAL: Probe PCI driver: net_ixgbe (8086:10fb) device: 0000:06:00.0 (socket 0)
+EAL: Probe PCI driver: net_ixgbe (8086:10fb) device: 0000:06:00.1 (socket 0)
+eth_ixgbe_dev_init(): No TX queues configured yet. Using default TX function.
+EAL: No legacy callbacks, legacy socket not created
+cur_index:1, action:2, destination:1
+
+APP: Waiting for manager to assign an ID...
+APP: Using Instance ID 4
+APP: Using Service ID 3
+APP: Running on core 3
+APP: Finished Process Init.
+Sending NF_READY message to manager...
+Creating 16000 packets to send to 3
+[2J[1;1HTotal packets:  10000000 
+TX pkts per second:         1 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets:  20000000 
+TX pkts per second:  37481454 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets:  30000000 
+TX pkts per second:  37481119 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets:  40000000 
+TX pkts per second:  37511586 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets:  50000000 
+TX pkts per second:  37595536 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets:  60000000 
+TX pkts per second:  37608901 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets:  70000000 
+TX pkts per second:  37615409 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets:  80000000 
+TX pkts per second:  37620833 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets:  90000000 
+TX pkts per second:  37608835 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 100000000 
+TX pkts per second:  37597533 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 110000000 
+TX pkts per second:  37597390 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 120000000 
+TX pkts per second:  37594332 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 130000000 
+TX pkts per second:  37618479 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 140000000 
+TX pkts per second:  37605610 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 150000000 
+TX pkts per second:  37623585 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 160000000 
+TX pkts per second:  37611486 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 170000000 
+TX pkts per second:  37601708 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 180000000 
+TX pkts per second:  37614813 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 190000000 
+TX pkts per second:  37623020 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 200000000 
+TX pkts per second:  37605483 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 210000000 
+TX pkts per second:  37606410 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 220000000 
+TX pkts per second:  37612312 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 230000000 
+TX pkts per second:  37611164 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 240000000 
+TX pkts per second:  37608584 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 250000000 
+TX pkts per second:  37597095 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 260000000 
+TX pkts per second:  37599044 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 270000000 
+TX pkts per second:  37611155 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 280000000 
+TX pkts per second:  37607813 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 290000000 
+TX pkts per second:  37596755 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 300000000 
+TX pkts per second:  37618157 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 310000000 
+TX pkts per second:  37619970 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 320000000 
+TX pkts per second:  37624818 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 330000000 
+TX pkts per second:  37607746 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 340000000 
+TX pkts per second:  37588743 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 350000000 
+TX pkts per second:  37617890 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 360000000 
+TX pkts per second:  37618824 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 370000000 
+TX pkts per second:  37597591 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 380000000 
+TX pkts per second:  37602004 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 390000000 
+TX pkts per second:  37611073 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 400000000 
+TX pkts per second:  37608781 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 410000000 
+TX pkts per second:  37622050 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 420000000 
+TX pkts per second:  37598314 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 430000000 
+TX pkts per second:  37595795 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 440000000 
+TX pkts per second:  37598834 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 450000000 
+TX pkts per second:  37603914 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 460000000 
+TX pkts per second:  37603483 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 470000000 
+TX pkts per second:  37620115 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 480000000 
+TX pkts per second:  37608888 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 490000000 
+TX pkts per second:  37597324 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 500000000 
+TX pkts per second:  37605352 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 510000000 
+TX pkts per second:  37599357 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 520000000 
+TX pkts per second:  37614631 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 530000000 
+TX pkts per second:  37611553 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 540000000 
+TX pkts per second:  37597700 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 550000000 
+TX pkts per second:  37605347 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 560000000 
+TX pkts per second:  37616391 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 570000000 
+TX pkts per second:  37628392 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 580000000 
+TX pkts per second:  37615380 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 590000000 
+TX pkts per second:  37606541 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 600000000 
+TX pkts per second:  37618666 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 610000000 
+TX pkts per second:  37609543 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 620000000 
+TX pkts per second:  37600997 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 630000000 
+TX pkts per second:  37605512 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 640000000 
+TX pkts per second:  37618424 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 650000000 
+TX pkts per second:  37623308 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 660000000 
+TX pkts per second:  37613874 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 670000000 
+TX pkts per second:  37602530 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 680000000 
+TX pkts per second:  37607646 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 690000000 
+TX pkts per second:  37613301 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 700000000 
+TX pkts per second:  37630972 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 710000000 
+TX pkts per second:  37619551 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 720000000 
+TX pkts per second:  37593655 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 730000000 
+TX pkts per second:  37591372 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 740000000 
+TX pkts per second:  37609294 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 750000000 
+TX pkts per second:  37618772 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 760000000 
+TX pkts per second:  37600716 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 770000000 
+TX pkts per second:  37614141 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 780000000 
+TX pkts per second:  37604969 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 790000000 
+TX pkts per second:  37603682 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 800000000 
+TX pkts per second:  37612036 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 810000000 
+TX pkts per second:  37604712 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 820000000 
+TX pkts per second:  37609836 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 830000000 
+TX pkts per second:  37613840 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 840000000 
+TX pkts per second:  37616297 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 850000000 
+TX pkts per second:  37617050 
+Initial packets created: 16000
+
+
+[2J[1;1HTotal packets: 860000000 
+TX pkts per second:  37606740 
+Initial packets created: 16000
+
+
+APP: Shutting down...
+[2J[1;1HNF Activity summary
+----------------------------------------------------
+NF tag: speed_tester
+NF instance ID: 4
+NF service ID: 3
+NF assigned core: 3
+----------------------------------------------------
+RX total: 863390384
+RX total dropped: 0
+TX total: 863374384
+TX total dropped: 0
+NF sent out: 0
+NF sent to NF: 863383181
+NF dropped: 0
+NF next: 0
+NF tx buffered: 0
+NF tx returned: 16000
+
+CSV file written to speed_tester directory
+If we reach here, program is ending
