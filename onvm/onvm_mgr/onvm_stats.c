@@ -229,7 +229,7 @@ void
 onvm_stats_gen_event_info(const char *msg, uint8_t type, void *data) {
         struct onvm_event *event;
 
-        event = (struct onvm_event *)malloc(sizeof(struct onvm_event));
+        event = (struct onvm_event *)rte_malloc("onvm stats gen event info", sizeof(struct onvm_event), 0);
         if (event == NULL) {
                 perror("Couldn't allocate event");
                 return;
@@ -246,7 +246,7 @@ void
 onvm_stats_gen_event_nf_info(const char *msg, struct onvm_nf *nf) {
         struct onvm_event *event;
 
-        event = (struct onvm_event *)malloc(sizeof(struct onvm_event));
+        event = (struct onvm_event *)rte_malloc("onvm stats gen event nf info", sizeof(struct onvm_event), 0);
         if (event == NULL) {
                 perror("Couldn't allocate event");
                 return;
@@ -264,6 +264,7 @@ onvm_stats_gen_event_nf_info(const char *msg, struct onvm_nf *nf) {
 static void
 onvm_stats_add_event(struct onvm_event *event_info) {
         if (event_info == NULL || stats_destination != ONVM_STATS_WEB) {
+                rte_free(event_info);
                 return;
         }
         char event_time_buf[20];
@@ -305,6 +306,7 @@ onvm_stats_add_event(struct onvm_event *event_info) {
 
         cJSON_AddItemToObject(new_event, "source", source);
         cJSON_AddItemToArray(onvm_json_events_arr, new_event);
+        rte_free(event_info);
 }
 
 static void
@@ -453,10 +455,21 @@ onvm_stats_display_nfs(unsigned difftime, uint8_t verbosity_level) {
                 const uint64_t act_next = nfs[i].stats.act_next;
                 const uint64_t act_buffer = nfs[i].stats.tx_buffer;
                 const uint64_t act_returned = nfs[i].stats.tx_returned;
+
+                /* On onvm_stats_clear_nf, subtraction causes underflow */
+                if (unlikely(rx == 0))
+                        nf_rx_last[i] = 0;
                 const uint64_t rx_pps = (rx - nf_rx_last[i]) / difftime;
+                if (unlikely(tx == 0))
+                        nf_tx_last[i] = 0;
                 const uint64_t tx_pps = (tx - nf_tx_last[i]) / difftime;
-                const uint64_t tx_drop_rate = (tx_drop - nf_tx_drop_last[i]) / difftime;
+                if (unlikely(rx_drop == 0))
+                        nf_rx_drop_last[i] = 0;
                 const uint64_t rx_drop_rate = (rx_drop - nf_rx_drop_last[i]) / difftime;
+                if (unlikely(tx_drop == 0))
+                        nf_tx_drop_last[i] = 0;
+                const uint64_t tx_drop_rate = (tx_drop - nf_tx_drop_last[i]) / difftime;
+
                 const uint64_t num_wakeups = nf_wakeup_infos[i].num_wakeups;
                 const uint64_t prev_num_wakeups = nf_wakeup_infos[i].prev_num_wakeups;
                 const uint64_t wakeup_rate = (num_wakeups - prev_num_wakeups) / difftime;
@@ -569,7 +582,6 @@ onvm_stats_display_nfs(unsigned difftime, uint8_t verbosity_level) {
                 fprintf(stats_out, "-----------------\n");
                 onvm_stats_display_client_wakeup_thread_context(difftime);
         }
-
 }
 
 /***************************Helper functions**********************************/
@@ -591,7 +603,7 @@ onvm_stats_print_MAC(uint8_t port) {
                 return err_address;
 
         if (unlikely(addresses[port][0] == '\0')) {
-                struct ether_addr mac;
+                struct rte_ether_addr mac;
                 rte_eth_macaddr_get(port, &mac);
                 snprintf(addresses[port], sizeof(addresses[port]), "%02x:%02x:%02x:%02x:%02x:%02x\n", mac.addr_bytes[0],
                          mac.addr_bytes[1], mac.addr_bytes[2], mac.addr_bytes[3], mac.addr_bytes[4], mac.addr_bytes[5]);

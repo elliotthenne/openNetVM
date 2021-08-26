@@ -42,11 +42,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <rte_memcpy.h>
 
 #include "cJSON.h"
 #include "onvm_config_common.h"
 
 #define IS_NULL_OR_EMPTY_STRING(s) ((s) == NULL || strncmp(s, "", 1) == 0 ? 1 : 0)
+
+size_t
+strlenn(const char* __s) {
+        return strlen(__s) + 1;
+}
 
 cJSON*
 onvm_config_parse_file(const char* filename) {
@@ -72,11 +78,16 @@ onvm_config_parse_file(const char* filename) {
         rewind(fp);
 
         json_str = (char*)malloc(file_length + 1);
+        if (!json_str) {
+                printf("Unable to allocate space for json_str\n");
+                fclose(fp);
+                return NULL;
+        }
         tmp = json_str;
 
         while ((line = fgets(temp_buf, file_length, fp)) != NULL) {
                 str_len = (int)strlen(line);
-                strncpy(tmp, line, str_len);
+                memcpy(tmp, line, str_len);
                 tmp += str_len;
         }
 
@@ -103,9 +114,13 @@ onvm_config_extract_corelist(cJSON* dpdk_config, int* size, int** list) {
         }
 
         local_size = cJSON_GetArraySize(json_arr);
+        if (*list == NULL) {
+                return -1;
+        }
 
         local_list = (int*)malloc(*size * sizeof(int));
-        if (*list == NULL) {
+        if (local_list == NULL) {
+                free(*list);
                 return -1;
         }
 
@@ -171,6 +186,7 @@ onvm_config_extract_output_location(cJSON* onvm_config, char** output_loc) {
         local_output_loc =
             (char*)malloc(sizeof(char) * strlen(cJSON_GetObjectItem(onvm_config, "output")->valuestring));
         if (local_output_loc == NULL) {
+                printf("Unable to allocate local output loc");
                 return -1;
         }
 
@@ -287,11 +303,12 @@ onvm_config_create_nf_arg_list(cJSON* config, int* argc, char** argv[]) {
 
         new_argv[0] = (char*)malloc(strlen((*argv)[0]));
         if (new_argv[0] == NULL) {
+                free(new_argv);
                 return -1;
         }
 
         /* Copy the program name */
-        strncpy(new_argv[0], (*argv)[0], strlen((*argv)[0]));
+        memcpy(new_argv[0], (*argv)[0], strlen((*argv)[0]));
 
         /*First arg has been filled in, so offset by that */
         offset = 1;
@@ -345,7 +362,7 @@ onvm_config_create_nf_arg_list(cJSON* config, int* argc, char** argv[]) {
         for (i = 1; i < onvm_new_argv_index - 1; ++i) {
                 for (j = 3; j < onvm_old_argv_index - 1; ++j) {
                         if (strncmp((*argv)[j], new_argv[i], strlen(new_argv[i])) == 0 && j % 2 == 1) {
-                                memcpy(new_argv[i + 1], (*argv)[j + 1], strlen((*argv)[j + 1]));
+                                rte_memcpy(new_argv[i + 1], (*argv)[j + 1], strlen((*argv)[j + 1]));
                         }
                 }
         }
@@ -354,7 +371,7 @@ onvm_config_create_nf_arg_list(cJSON* config, int* argc, char** argv[]) {
         for (i = onvm_new_argv_index; i < nf_new_argv_index; ++i) {
                 for (j = onvm_old_argv_index; j < nf_old_argv_index; ++j) {
                         if (strncmp((*argv)[j], new_argv[i], strlen(new_argv[i])) == 0 && j % 2 == 0) {
-                                memcpy(new_argv[i + 1], (*argv)[j + 1], strlen((*argv)[j + 1]));
+                                rte_memcpy(new_argv[i + 1], (*argv)[j + 1], strlen((*argv)[j + 1]));
                         }
                 }
         }
@@ -404,16 +421,19 @@ onvm_config_create_onvm_args(cJSON* onvm_config, int* onvm_argc, char** onvm_arg
         service_id_string = (char*)malloc(sizeof(char) * MAX_SERVICE_ID_SIZE);
         if (service_id_string == NULL) {
                 printf("Unable to allocate space for onvm_service_id_string\n");
+                free(*onvm_argv);
                 return -1;
         }
 
-        (*onvm_argv)[0] = malloc(sizeof(char) * strlen(FLAG_R));
+        (*onvm_argv)[0] = malloc(sizeof(char) * strlenn(FLAG_R));
         if ((*onvm_argv)[0] == NULL) {
                 printf("Unable to allocate space for onvm_argv[0]\n");
+                free(service_id_string);
+                free(*onvm_argv);
                 return -1;
         }
 
-        strncpy((*onvm_argv)[0], FLAG_R, strlen(FLAG_R));
+        memcpy((*onvm_argv)[0], FLAG_R, strlenn(FLAG_R));
 
         snprintf(service_id_string, sizeof(char) * MAX_SERVICE_ID_SIZE, "%d", service_id);
         (*onvm_argv)[1] = service_id_string;
@@ -422,15 +442,22 @@ onvm_config_create_onvm_args(cJSON* onvm_config, int* onvm_argc, char** onvm_arg
                 instance_id_string = (char*)malloc(sizeof(char) * MAX_SERVICE_ID_SIZE);
                 if (instance_id_string == NULL) {
                         printf("Unable to allocate space for onvm_instance_id_string\n");
+                        free(service_id_string);
+                        free(*onvm_argv);
+                        free((*onvm_argv)[0]);
                         return -1;
                 }
 
-                (*onvm_argv)[2] = malloc(sizeof(char) * strlen(FLAG_N));
+                (*onvm_argv)[2] = malloc(sizeof(char) * strlenn(FLAG_N));
                 if ((*onvm_argv)[2] == NULL) {
                         printf("Could not allocate space for instance id in argv\n");
+                        free(instance_id_string);
+                        free(service_id_string);
+                        free(*onvm_argv);
+                        free((*onvm_argv)[0]);
                         return -1;
                 }
-                strncpy((*onvm_argv)[2], FLAG_N, strlen(FLAG_N));
+                memcpy((*onvm_argv)[2], FLAG_N, strlenn(FLAG_N));
                 snprintf(instance_id_string, sizeof(char) * MAX_SERVICE_ID_SIZE, "%d", instance_id);
                 (*onvm_argv)[3] = instance_id_string;
         }
@@ -464,20 +491,27 @@ onvm_config_create_dpdk_args(cJSON* dpdk_config, int* dpdk_argc, char** dpdk_arg
 
         arg_size = (size_t*)malloc(sizeof(size_t) * (*dpdk_argc));
         if (arg_size == NULL) {
+                printf("Unable to allocate space for arg size\n");
+                free(*dpdk_argv);
                 return -1;
         }
 
-        core_string = (char*)malloc(sizeof(char) * strlen(cJSON_GetObjectItem(dpdk_config, "corelist")->valuestring));
+        core_string = (char*)malloc(sizeof(char) * strlenn(cJSON_GetObjectItem(dpdk_config, "corelist")->valuestring));
         if (core_string == NULL) {
                 printf("Unable to allocate space for core string\n");
+                free(*dpdk_argv);
+                free(arg_size);
                 return -1;
         }
 
         core_string = strncpy(core_string, cJSON_GetObjectItem(dpdk_config, "corelist")->valuestring,
-                              strlen(cJSON_GetObjectItem(dpdk_config, "corelist")->valuestring));
+                              strlenn(cJSON_GetObjectItem(dpdk_config, "corelist")->valuestring));
 
         if (onvm_config_extract_memory_channels(dpdk_config, &mem_channels) < 0) {
                 printf("Unable to extract memory channels\n");
+                free(*dpdk_argv);
+                free(core_string);
+                free(arg_size);
                 return -1;
         }
 
@@ -485,32 +519,45 @@ onvm_config_create_dpdk_args(cJSON* dpdk_config, int* dpdk_argc, char** dpdk_arg
         mem_channels_string = (char*)malloc(mem_channels_string_size);
         if (mem_channels_string == NULL) {
                 printf("Unable to allocate space for memory channels string\n");
+                free(*dpdk_argv);
+                free(core_string);
+                free(arg_size);
                 return -1;
         }
 
         snprintf(mem_channels_string, mem_channels_string_size, "%d", mem_channels);
 
-        arg_size[0] = strlen(FLAG_L);
-        arg_size[1] = strlen(core_string);
-        arg_size[2] = strlen(FLAG_N);
-        arg_size[3] = strlen(mem_channels_string);
-        arg_size[4] = strlen(PROC_TYPE_SECONDARY);
-        arg_size[5] = strlen(FLAG_DASH);
+        arg_size[0] = strlenn(FLAG_L);
+        arg_size[1] = strlenn(core_string);
+        arg_size[2] = strlenn(FLAG_N);
+        arg_size[3] = strlenn(mem_channels_string);
+        arg_size[4] = strlenn(PROC_TYPE_SECONDARY);
+        arg_size[5] = strlenn(FLAG_DASH);
 
         for (i = 0; i < *dpdk_argc; ++i) {
                 (*dpdk_argv)[i] = (char*)malloc(arg_size[i]);
 
                 if ((*dpdk_argv)[i] == NULL) {
+                        while (i != 0) {
+                                free((*dpdk_argv)[i]);
+                                i--;
+                        }
+                        printf("Unable to allocate space for **dpdk_argv\n");
+                        free((*dpdk_argv)[0]);
+                        free(*dpdk_argv);
+                        free(core_string);
+                        free(arg_size);
+                        free(mem_channels_string);
                         return -1;
                 }
         }
 
-        strncpy((*dpdk_argv)[0], FLAG_L, arg_size[0]);
-        strncpy((*dpdk_argv)[1], core_string, arg_size[1]);
-        strncpy((*dpdk_argv)[2], FLAG_N, arg_size[2]);
-        strncpy((*dpdk_argv)[3], mem_channels_string, arg_size[3]);
-        strncpy((*dpdk_argv)[4], PROC_TYPE_SECONDARY, arg_size[4]);
-        strncpy((*dpdk_argv)[5], FLAG_DASH, arg_size[5]);
+        memcpy((*dpdk_argv)[0], FLAG_L, arg_size[0]);
+        memcpy((*dpdk_argv)[1], core_string, arg_size[1]);
+        memcpy((*dpdk_argv)[2], FLAG_N, arg_size[2]);
+        memcpy((*dpdk_argv)[3], mem_channels_string, arg_size[3]);
+        memcpy((*dpdk_argv)[4], PROC_TYPE_SECONDARY, arg_size[4]);
+        memcpy((*dpdk_argv)[5], FLAG_DASH, arg_size[5]);
 
         free(arg_size);
         free(core_string);

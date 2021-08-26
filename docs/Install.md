@@ -18,9 +18,30 @@ Check System
     your Kernel version should be higher than 2.6.33.
 
 3. Install dependencies
+
+    Install the Linux Kernel headers package for your kernel version.
     ```sh
-    sudo apt-get install build-essential linux-headers-$(uname -r) git
+    sudo apt-get install build-essential linux-headers-$(uname -r) git bc gcc make pkg-config
     ```
+    If your distribution didn't come with Python or came with an earlier version, you will need to install Python 3 v3.4+. 
+
+    See if Python is already installed with
+
+    ```sh
+    python3 --version 
+    ```
+    Install Python with your distribution's package manager (Note: the command and package name may vary).
+
+    On Debian derivatives such as Ubuntu, use `apt`. Check the apt repository for the versions of Python available to you. Then, run the following command:
+    ```sh
+    sudo apt-get install python3
+    ```
+
+    Verify that Python installed correctly with
+    ```sh
+    python3 --version
+    ```
+
 4. Assure your kernel supports uio
     ```sh
     locate uio
@@ -29,7 +50,7 @@ Check System
    ```sh
    sudo apt-get install libnuma-dev
    ```
-   If installing libnuma-dev fails, your system may not be up to date. To fix this, run:
+   If installing libnuma-dev fails, your package information may not be up to date. To fix this, run:
    ```sh
    sudo apt-get update
    ```
@@ -84,7 +105,7 @@ Set up Environment
     echo export ONVM_NUM_HUGEPAGES=1024 >> ~/.bashrc
     ```
 
-    ONVM_NIC_PCI is a variable that specifies NIC ports to be bound to DPDK.  If ONVM_NIC_PCI is not specified, the default action is to bind all non-active 10G NIC ports to DPDK. Note, NIC PCI device IDs may not be the same across all hosts. In that case, please retrieve this information for your host before setting the variable.
+    ONVM_NIC_PCI is a variable that specifies NIC ports to be bound to DPDK.  If ONVM_NIC_PCI is not specified, the default action is to bind all non-active 10G NIC ports to DPDK. Note, NIC PCI device IDs may not be the same across all hosts. In that case, please retrieve this information for your host before setting the variable. (e.g., via `lspci`)
     ```sh
     export ONVM_NIC_PCI=" 07:00.0 07:00.1 "
     ```
@@ -95,8 +116,8 @@ Set up Environment
 
 7. Disable ASLR since it makes sharing memory with NFs harder:
    ```sh
-    sudo sh -c "echo 0 > /proc/sys/kernel/randomize_va_space"
-    ```
+   sudo sh -c "echo 0 > /proc/sys/kernel/randomize_va_space"
+   ```
 
 Configure and compile DPDK
 --
@@ -108,6 +129,8 @@ Configure and compile DPDK
     ```
 
     The [install script](../scripts/install.sh) will automatically run the [environment setup script](../scripts/setup_environment.sh), which configures your local environment.  This should be run once for every reboot, as it loads the appropraite kernel modules and can bind your NIC ports to the DPDK driver.
+
+    If `which python` shows **not found** in your environment, please link `python` to Python3, e.g., via `link -s` or `alias python=$(which python3)`.
 
 Run DPDK HelloWorld Application
 --
@@ -142,6 +165,11 @@ Make and test openNetVM
     make
 	cd ..
     ```
+    Note: You may see the errors below upon compilation. Please ignore.
+    ```
+    cat: ../openNetVM/onvm/lib/ABI_VERSION: No such file or directory found
+    cat: ../openNetVM/onvm/onvm_nflib/ABI_VERSION: No such file or directory found
+    ```
 
 2. Compile example NFs
 
@@ -153,10 +181,10 @@ Make and test openNetVM
 
 3. Run openNetVM manager
 
-    Run openNetVM manager to use 3 cores (1 for displaying statistics, 1 for handling TX queues, 1 for handling manager RX queues), to use 1 NIC port (hexadecimal portmask), 0xF8 for the NF coremask (cores 3, 4, 5, 6, 7), and to use stdout for the statistics console:
+    Run openNetVM manager to use 3 cores (1 for displaying statistics, 1 for handling TX queues, 1 for handling manager RX queues; set to cores 0, 1 and 2, respectively, by default), to use 1 NIC port (hexadecimal portmask), 0xF8 for the NF coremask (cores 3, 4, 5, 6, 7), and to use stdout for the statistics console:
 
     ```sh
-    ./onvm/go.sh 0,1,2 1 0xF8 -s stdout
+    ./onvm/go.sh -k 1 -n 0xF8 -s stdout
     ```
     
     You should see information regarding the NIC port that openNetVM is using, and openNetVM manager statistics will be displayed.
@@ -190,15 +218,15 @@ Troubleshooting
     
     Run `dpdk/usertools/dpdk-setup.sh` then:
     
-    - Press [15] to compile x86_64-native-linuxapp-gcc version
+    - Press [38] to compile x86_64-native-linuxapp-gcc version
 
-    - Press [18] to install igb_uio driver for Intel NICs
+    - Press [45] to install igb_uio driver for Intel NICs
 
-    - Press [22] to setup 1024 2MB hugepages
+    - Press [49] to setup 1024 2MB hugepages
 
-    - Press [24] to register the Ethernet ports
+    - Press [51] to register the Ethernet ports
 
-    - Press [35] to quit the tool
+    - Press [62] to quit the tool
     
     After these steps, it should be possible to compile and run onvm. 
 
